@@ -1,4 +1,4 @@
-const utility = require("../utility");
+const utility = require("../src/app/utility");
 
 test('Get successful result of the API call', async() => {
   const apiUrl = "https://rss.acast.com/varvet";
