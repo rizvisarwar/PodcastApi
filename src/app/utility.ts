@@ -10,12 +10,10 @@ async function getItemsFromRSS(url: string) {
 
   try {
     let response = await parser.parseURL(url);
-    await response.reduce(
-      async (
-        promise: any,
-        item: { enclosure: { url: string }; title: string; link: string }
-      ) => {
-        await promise;
+
+    //taking first five items from the list
+    const slicedItems = response.items.slice(0,5);
+    const promises = slicedItems.map(async function (item: { enclosure: { url: string; }; title: string; link: string; }) {
         const res = await axios.get(item.enclosure.url);
         let data: Episode = episode(
           item.title,
@@ -23,86 +21,14 @@ async function getItemsFromRSS(url: string) {
           item.link
         );
         episodes.push(data);
+      });
+    // wait until all promises are resolved
+    await Promise.all(promises);
 
-        // getChecksum(item.enclosure.url).then((checksum: any) => {
-        //             let data: Episode = episode(item.title, checksum, item.link);
-        //             episodes.push(data);
-        //           });
-      },
-      Promise.resolve()
-    );
-
-    // await Promise.all(response.items.map(async (item: { enclosure: { url: string; }; title: string; link: string; }) => {
-    //   // const checksum = await getChecksum(item.enclosure.url);
-    //   // let data: Episode = episode(item.title, "123", item.link);
-    //   // episodes.push(data);
-
-    //   await getChecksum(item.enclosure.url).then((checksum: any) => {
-    //           let data: Episode = episode(item.title, checksum, item.link);
-    //           episodes.push(data);
-    //         });
-    // }));
-
-    // response.items.forEach(
-    //   async (item: { title: string; link: string; enclosure: any }) => {
-    //     // const aa = getChecksum(item.enclosure.url);
-    //     // let data: Episode = episode(item.title, "123", item.link);
-    //     // episodes.push(data);
-
-    //     await getChecksum(item.enclosure.url).then((checksum: any) => {
-    //       let data: Episode = episode(item.title, checksum, item.link);
-    //       episodes.push(data);
-    //     });
-    //   }
-    // );
     return episodes;
   } catch (error) {
     throw error;
   }
-}
-
-async function getChecksum(input: string) {
-  let a = 2;
-  let b = 3;
-  let c = a + b;
-
-  // try {
-
-  // const response = await axios.get(input);
-  // return "test";
-  // return generateChecksum(response.data);
-
-  //   // .then(function (response) {
-  //   //   // handle success
-  //   //   let mp3Data = response.data;
-  //   //   return generateChecksum(mp3Data);
-  //   // })
-  //   // .catch(function (error) {
-  //   //   // handle error
-  //   //   throw error;
-  //   // });
-  //   // handle success
-  //   // return response.data;
-  // } catch (error) {
-  //   // handle error
-  //   throw error;
-  // }
-
-  axios
-    .get(input)
-    .then(function (response) {
-      // handle success
-      let mp3Data = response.data;
-      let cs = generateChecksum(mp3Data);
-      return cs;
-    })
-    .catch(function (error) {
-      // handle error
-      throw error;
-    })
-    .then(function () {
-      // always executed
-    });
 }
 
 function generateChecksum(str: string) {
