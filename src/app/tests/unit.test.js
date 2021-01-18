@@ -2,7 +2,7 @@ const utility = require("../utility");
 
 test('Get successful result of the API call', async() => {
   const apiUrl = "https://rss.acast.com/varvet";
-  await utility.fetchXML(apiUrl)
+  await utility.getItemsFromRSS(apiUrl)
     .then(response => {
       expect(response.length).toBeGreaterThan(0);
     })
@@ -14,12 +14,11 @@ test('Get successful result of the API call', async() => {
 test("Get unsuccessful result of the API call", async () => {
   const apiUrl = "https://rss.acast.com/varvet121212";
   await utility
-    .fetchXML(apiUrl)
+    .getItemsFromRSS(apiUrl)
     .then((response) => {
       fail(`Expected failure response`);
     })
     .catch((e) => {
-      expect(e.response.status).toBeGreaterThanOrEqual(400);
-      expect(e.response.status).toBeLessThan(500);
+      expect(e.message).toBe("Status code 404");
     });
 });

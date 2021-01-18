@@ -8,45 +8,39 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importDefault(require("axios"));
-function getItemFromXML(xmlData) {
-    let parser = require("fast-xml-parser");
-    let options = {
-        attributeNamePrefix: "@_",
-        attrNodeName: "attr",
-        textNodeName: "#text",
-        ignoreAttributes: false,
-        ignoreNameSpace: false,
-        allowBooleanAttributes: false,
-        parseNodeValue: true,
-        parseAttributeValue: false,
-        trimValues: true,
-        cdataTagName: "__cdata",
-        cdataPositionChar: "\\c",
-        parseTrueNumberOnly: false,
-        arrayMode: false,
-        stopNodes: ["parse-me-as-string"],
-    };
-    let jsonObj = parser.parse(xmlData, options, true);
-    return jsonObj.rss.channel.item;
-}
-function fetchXML(url) {
+function getItemsFromRSS(url) {
     return __awaiter(this, void 0, void 0, function* () {
+        let Parser = require("rss-parser");
+        let parser = new Parser();
+        let episodes = [];
         try {
-            const response = yield axios_1.default
-                .get(url);
-            // handle success
-            return response.data;
+            let response = yield parser.parseURL(url);
+            response.items.forEach((item) => {
+                let data = episode(item.title, 123, item.link);
+                episodes.push(data);
+            });
+            return episodes;
         }
         catch (error) {
-            // handle error
             throw error;
         }
     });
 }
-;
-module.exports = { getItemFromXML, fetchXML };
+const episode = (title, checkoutsum, url) => {
+    try {
+        return {
+            title: title,
+            checkoutsum: checkoutsum,
+            url: url,
+        };
+    }
+    catch (err) {
+        return {
+            title: title,
+            checkoutsum: checkoutsum,
+            url: url,
+        };
+    }
+};
+module.exports = { getItemsFromRSS };

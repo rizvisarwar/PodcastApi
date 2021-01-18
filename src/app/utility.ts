@@ -1,37 +1,37 @@
-import axios from "axios";
+import { Episode } from "./typings/entities";
+import { Episodes } from "./typings/responses";
 
-function getItemFromXML(xmlData: any) {
-  let parser = require("fast-xml-parser");
-  let options = {
-    attributeNamePrefix: "@_",
-    attrNodeName: "attr", //default is 'false'
-    textNodeName: "#text",
-    ignoreAttributes: false,
-    ignoreNameSpace: false,
-    allowBooleanAttributes: false,
-    parseNodeValue: true,
-    parseAttributeValue: false,
-    trimValues: true,
-    cdataTagName: "__cdata", //default is 'false'
-    cdataPositionChar: "\\c",
-    parseTrueNumberOnly: false,
-    arrayMode: false, //"strict"
-    stopNodes: ["parse-me-as-string"],
-  };
-  let jsonObj = parser.parse(xmlData, options, true);
-  return jsonObj.rss.channel.item;
+async function getItemsFromRSS(url: string) {
+  let Parser = require("rss-parser");
+  let parser = new Parser();
+  let episodes: Episodes = [];
+
+  try {
+    let response = await parser.parseURL(url);
+    response.items.forEach((item: { title: string; link: string; }) => {
+          let data: Episode = episode(item.title, 123, item.link);
+          episodes.push(data);
+        });
+    return episodes;
+  } catch (error) {
+    throw error;
+  }  
 }
 
-async function fetchXML(url: any) {
-    try {
-      const response = await axios
-        .get(url);
-      // handle success
-      return response.data;
-    } catch (error) {
-      // handle error
-      throw error;
-    }
-  };
+const episode = (title: string, checkoutsum: number, url: string): Episode => {
+  try {
+    return {
+      title: title,
+      checkoutsum: checkoutsum,
+      url: url,
+    };
+  } catch (err) {
+    return {
+      title: title,
+      checkoutsum: checkoutsum,
+      url: url,
+    };
+  }
+};
 
-module.exports = { getItemFromXML, fetchXML };
+module.exports = { getItemsFromRSS };
