@@ -1,0 +1,71 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Yet Another Node.js Blogg Application API",
+      "description": "Yet Another Node.js Blogg Application API",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:3000",
+    "basePath": "/api/v1",
+    "schemes": [
+      "http"
+    ],
+    "consumes": [
+      "application/json"
+    ],
+    "produces": [
+      "application/json"
+    ],
+    "paths": {
+      "/episodes/metadata": {
+        "parameters": [
+          {
+            "name": "rss",
+            "in": "query",
+            "required": true,
+            "description": "RSS URL",
+            "type": "string"
+          }
+        ],
+        "get": {
+          "tags": [
+            "Episodes"
+          ],
+          "summary": "Get episodes metadata for given URl",
+          "responses": {
+            "200": {
+              "description": "Metadata is found",
+              "schema": {
+                "$ref": "#/definitions/Episodes"
+              }
+            }
+          }
+        }       
+      }
+    },
+    "definitions": {
+      "Episode": {
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "checksum": {
+            "type": "number"
+          },
+          "url": {
+            "type": "string"
+          }
+        }
+      },
+      "Episodes": {
+        "type": "array",
+        "items": {
+            "type": "object"
+          }
+      }
+    }
+  }
