@@ -35,7 +35,6 @@ Example: GET episodes/metadata?rss=https://rss.acast.com/varvet
 
 ## Tools and libraries used
 
-    - axios
     - jest
     - express
     - fast-xml-parser

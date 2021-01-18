@@ -1,70 +1,28 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const axios_1 = __importDefault(require("axios"));
 const utility = require("./utility");
 const router = express_1.Router();
-let mp3Data;
-router.get("/episodes/metadata/", (request, response) => {
+router.get("/episodes/metadata/", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let queryParam = request.query.rss;
-    let result = [];
-    utility.fetchXML(queryParam)
-        .then((xmlData) => {
-        try {
-            let item = utility.getItemFromXML(xmlData);
-            for (let i of item) {
-                let data = episode(i.title, 123, i.link);
-                // fetchMP3(i.enclosure.attr["@_url"])
-                // .then((resMP3) => {
-                //   let tt = mp3Data;
-                // });
-                result.push(data);
-            }
-        }
-        catch (error) {
-            response.status(500).send({ error: error.message });
-        }
-        response.send(result);
+    utility.getItemsFromRSS(queryParam)
+        .then((data) => {
+        response.send(data);
     })
         .catch(function (error) {
         response
             .status(404)
             .send({ error: "Xml not found. Please check if the URL is correct!" });
     });
-});
-const episode = (title, checkoutsum, url) => {
-    try {
-        return {
-            title: title,
-            checkoutsum: checkoutsum,
-            url: url,
-        };
-    }
-    catch (err) {
-        return {
-            title: title,
-            checkoutsum: checkoutsum,
-            url: url,
-        };
-    }
-};
-const fetchMP3 = (input) => {
-    return axios_1.default
-        .get(input)
-        .then(function (response) {
-        // handle success
-        mp3Data = response.data;
-    })
-        .catch(function (error) {
-        // handle error
-        throw error;
-    })
-        .then(function () {
-        // always executed
-    });
-};
+}));
 module.exports = router;
 exports.default = router;
