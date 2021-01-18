@@ -17,6 +17,8 @@ The REST endpoints are described below:
 The expected response is a JSON array.
 Example: GET episodes/metadata?rss=https://rss.acast.com/varvet
 
+
+```json
 [
 {
 "title": "KORT VERSION #450: Anne Lundberg",
@@ -29,6 +31,7 @@ Example: GET episodes/metadata?rss=https://rss.acast.com/varvet
 "url": "https://play.acast.com/s/varvet/-450-annelundberg"
 }
 ]
+```
 
 ## Tools and libraries used
 
@@ -38,7 +41,9 @@ Example: GET episodes/metadata?rss=https://rss.acast.com/varvet
     - fast-xml-parser
     - npm
     - nodemon
+    - rss-parser
     - swagger-ui-express
+    - swagger editor
     - typescript
 
 ## How to run
