@@ -1,5 +1,7 @@
 import { Episode } from "./typings/entities";
 import { Episodes } from "./typings/responses";
+import axios from "axios";
+import crypto from "crypto";
 
 async function getItemsFromRSS(url: string) {
   let Parser = require("rss-parser");
@@ -8,17 +10,32 @@ async function getItemsFromRSS(url: string) {
 
   try {
     let response = await parser.parseURL(url);
-    response.items.forEach((item: { title: string; link: string; }) => {
-          let data: Episode = episode(item.title, 123, item.link);
-          episodes.push(data);
-        });
+
+    //taking first two items from the list
+    const slicedItems = response.items.slice(0,2);
+    const promises = slicedItems.map(async function (item: { enclosure: { url: string; }; title: string; link: string; }) {
+        const res = await axios.get(item.enclosure.url);
+        let data: Episode = episode(
+          item.title,
+          generateChecksum(res.data),
+          item.link
+        );
+        episodes.push(data);
+      });
+    // wait until all promises are resolved
+    await Promise.all(promises);
+
     return episodes;
   } catch (error) {
     throw error;
-  }  
+  }
 }
 
-const episode = (title: string, checkoutsum: number, url: string): Episode => {
+function generateChecksum(str: string) {
+  return crypto.createHash("md5").update(str, "utf8").digest("hex");
+}
+
+const episode = (title: string, checkoutsum: string, url: string): Episode => {
   try {
     return {
       title: title,

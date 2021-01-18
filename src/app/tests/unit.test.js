@@ -9,7 +9,7 @@ test('Get successful result of the API call', async() => {
     .catch(e => {
       fail(`Expected successful response`);
     });
-});
+}, 10000);
 
 test("Get unsuccessful result of the API call", async () => {
   const apiUrl = "https://rss.acast.com/varvet121212";

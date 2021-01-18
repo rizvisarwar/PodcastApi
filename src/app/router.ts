@@ -13,7 +13,7 @@ router.get("/episodes/metadata/", async (request, response) => {
   .catch(function (error:any) {
     response
       .status(404)
-      .send({ error: "Xml not found. Please check if the URL is correct!" });
+      .send({ error: "Data not found. Please check if the URL is correct!" });
   });
 });
 
