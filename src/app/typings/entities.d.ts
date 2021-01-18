@@ -1,5 +1,5 @@
 export type Episode = {
   title: string,
-  checkoutsum: number,
+  checkoutsum: string,
   url: string
 }
