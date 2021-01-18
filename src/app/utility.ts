@@ -11,8 +11,8 @@ async function getItemsFromRSS(url: string) {
   try {
     let response = await parser.parseURL(url);
 
-    //taking first five items from the list
-    const slicedItems = response.items.slice(0,5);
+    //taking first two items from the list
+    const slicedItems = response.items.slice(0,2);
     const promises = slicedItems.map(async function (item: { enclosure: { url: string; }; title: string; link: string; }) {
         const res = await axios.get(item.enclosure.url);
         let data: Episode = episode(

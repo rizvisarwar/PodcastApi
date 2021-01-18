@@ -37,7 +37,6 @@ Example: GET episodes/metadata?rss=https://rss.acast.com/varvet
 
     - jest
     - express
-    - fast-xml-parser
     - npm
     - nodemon
     - rss-parser
@@ -46,6 +45,9 @@ Example: GET episodes/metadata?rss=https://rss.acast.com/varvet
     - typescript
 
 ## How to run
+While running for the first time, install dependencies by running the following command from project home directory:
+
+    $ npm install
 
 Easiest way is run the following command from project home directory:
 

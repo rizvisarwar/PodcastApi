@@ -21,7 +21,8 @@ function getItemsFromRSS(url) {
         let episodes = [];
         try {
             let response = yield parser.parseURL(url);
-            const slicedItems = response.items.slice(0, 5);
+            //taking first two items from the list
+            const slicedItems = response.items.slice(0, 2);
             const promises = slicedItems.map(function (item) {
                 return __awaiter(this, void 0, void 0, function* () {
                     const res = yield axios_1.default.get(item.enclosure.url);
