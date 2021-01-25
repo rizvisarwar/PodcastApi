@@ -14,28 +14,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios_1 = __importDefault(require("axios"));
 const crypto_1 = __importDefault(require("crypto"));
-function getItemsFromRSS(url) {
+function getItemsFromRSS(url, callBack) {
     return __awaiter(this, void 0, void 0, function* () {
         let Parser = require("rss-parser");
         let parser = new Parser();
         let episodes = [];
         try {
             let response = yield parser.parseURL(url);
-            //taking first two items from the list
-            const slicedItems = response.items.slice(0, 2);
-            const promises = slicedItems.map(function (item) {
-                return __awaiter(this, void 0, void 0, function* () {
-                    const res = yield axios_1.default.get(item.enclosure.url);
-                    let data = episode(item.title, generateChecksum(res.data), item.link);
-                    episodes.push(data);
-                });
+            const slicedItems = response.items.slice(0, 50);
+            slicedItems.map(function (item) {
+                const res = axios_1.default.get(item.enclosure.url);
+                let data = episode(item.title, generateChecksum("res.data"), item.link);
+                episodes.push(data);
             });
-            // wait until all promises are resolved
-            yield Promise.all(promises);
-            return episodes;
+            callBack(episodes);
         }
         catch (error) {
             throw error;
+        }
+        finally {
+            episodes = [];
         }
     });
 }

@@ -14,14 +14,13 @@ const utility = require("./utility");
 const router = express_1.Router();
 router.get("/episodes/metadata/", (request, response) => __awaiter(void 0, void 0, void 0, function* () {
     let queryParam = request.query.rss;
-    utility.getItemsFromRSS(queryParam)
-        .then((data) => {
+    utility.getItemsFromRSS(queryParam, function callback(data) {
         response.send(data);
     })
         .catch(function (error) {
         response
             .status(404)
-            .send({ error: "Xml not found. Please check if the URL is correct!" });
+            .send({ error: "Data not found. Please check if the URL is correct!" });
     });
 }));
 module.exports = router;
