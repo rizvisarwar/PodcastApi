@@ -17,7 +17,7 @@ async function getItemsFromRSS(url: string, callBack: any) {
       title: string;
       link: string;
     }) {
-      const res = axios.get(item.enclosure.url);
+      // const res = axios.get(item.enclosure.url);
       let data: Episode = episode(
         item.title,
         generateChecksum("res.data"),

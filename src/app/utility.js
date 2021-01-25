@@ -12,7 +12,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __importDefault(require("axios"));
 const crypto_1 = __importDefault(require("crypto"));
 function getItemsFromRSS(url, callBack) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -23,7 +22,7 @@ function getItemsFromRSS(url, callBack) {
             let response = yield parser.parseURL(url);
             const slicedItems = response.items.slice(0, 50);
             slicedItems.map(function (item) {
-                const res = axios_1.default.get(item.enclosure.url);
+                // const res = axios.get(item.enclosure.url);
                 let data = episode(item.title, generateChecksum("res.data"), item.link);
                 episodes.push(data);
             });
