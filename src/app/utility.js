@@ -13,19 +13,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const crypto_1 = __importDefault(require("crypto"));
+let episodes = [];
 function getItemsFromRSS(url, callBack) {
     return __awaiter(this, void 0, void 0, function* () {
         let Parser = require("rss-parser");
         let parser = new Parser();
-        let episodes = [];
         try {
             let response = yield parser.parseURL(url);
             const slicedItems = response.items.slice(0, 50);
-            slicedItems.map(function (item) {
-                // const res = axios.get(item.enclosure.url);
-                let data = episode(item.title, generateChecksum("res.data"), item.link);
-                episodes.push(data);
-            });
+            slicedItems.map(mapMetaData);
             callBack(episodes);
         }
         catch (error) {
@@ -35,6 +31,11 @@ function getItemsFromRSS(url, callBack) {
             episodes = [];
         }
     });
+}
+function mapMetaData(item) {
+    // const res = axios.get(item.enclosure.url);
+    let data = episode(item.title, generateChecksum("res.data"), item.link);
+    episodes.push(data);
 }
 function generateChecksum(str) {
     return crypto_1.default.createHash("md5").update(str, "utf8").digest("hex");

@@ -3,34 +3,37 @@ import { Episodes } from "./typings/responses";
 import axios from "axios";
 import crypto from "crypto";
 
+let episodes: Episodes = [];
+
 async function getItemsFromRSS(url: string, callBack: any) {
   let Parser = require("rss-parser");
   let parser = new Parser();
-  let episodes: Episodes = [];
 
   try {
     let response = await parser.parseURL(url);
 
     const slicedItems = response.items.slice(0, 50);
-    slicedItems.map(function (item: {
-      enclosure: { url: string };
-      title: string;
-      link: string;
-    }) {
-      // const res = axios.get(item.enclosure.url);
-      let data: Episode = episode(
-        item.title,
-        generateChecksum("res.data"),
-        item.link
-      );
-      episodes.push(data);
-    });
+    slicedItems.map(mapMetaData);
     callBack(episodes);
   } catch (error) {
     throw error;
   } finally {
     episodes = [];
   }
+}
+
+function mapMetaData(item: {
+  enclosure: { url: string };
+  title: string;
+  link: string;
+}) {
+  // const res = axios.get(item.enclosure.url);
+  let data: Episode = episode(
+    item.title,
+    generateChecksum("res.data"),
+    item.link
+  );
+  episodes.push(data);
 }
 
 function generateChecksum(str: string) {
