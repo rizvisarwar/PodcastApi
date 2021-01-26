@@ -30,7 +30,7 @@ function mapMetaData(item: {
   // const res = axios.get(item.enclosure.url);
   let data: Episode = episode(
     item.title,
-    generateChecksum("res.data"),
+    generateChecksum(item.enclosure.url),
     item.link
   );
   episodes.push(data);
