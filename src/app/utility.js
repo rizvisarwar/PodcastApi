@@ -34,7 +34,7 @@ function getItemsFromRSS(url, callBack) {
 }
 function mapMetaData(item) {
     // const res = axios.get(item.enclosure.url);
-    let data = episode(item.title, generateChecksum("res.data"), item.link);
+    let data = episode(item.title, generateChecksum(item.enclosure.url), item.link);
     episodes.push(data);
 }
 function generateChecksum(str) {

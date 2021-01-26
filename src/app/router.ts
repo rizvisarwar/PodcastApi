@@ -16,6 +16,4 @@ router.get("/episodes/metadata/", async (request, response) => {
   });
 });
 
-module.exports = router;
-
 export default router;
