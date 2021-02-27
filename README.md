@@ -1,4 +1,4 @@
-# ACAST coding assigment
+# My first code in Node.js
 
 You will find the coding assignment description in the [ASSIGNMENT.md](ASSIGNMENT.md) file.
 
